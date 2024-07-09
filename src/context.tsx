@@ -16,7 +16,7 @@ export function createLocaleContext<T extends object>(): [
     const existingLocale = useContext(context);
 
     return (
-      <context.Provider value={{ ...existingLocale, value }}>
+      <context.Provider value={{ ...existingLocale, ...value }}>
         {children}
       </context.Provider>
     );
