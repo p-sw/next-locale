@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 type MergeLocales<A, B> = {
-  [key in keyof A & keyof B]: A[key] extends object
+  [key in keyof A & keyof B]: A[key] extends Record<string, string | object>
     ? MergeLocales<A[key], B[key]>
     : A[key];
 };
