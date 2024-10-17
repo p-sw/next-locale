@@ -61,11 +61,37 @@ function $Proxy<T extends object | string>(
  *
  * @param proxiedLocale
  */
-function $Pure<T extends object>(proxiedLocale: T): T {
-  if (!(proxiedLocale as { [isProxied]: true | undefined })[isProxied])
+function $Pure<T extends Record<string, object>>(proxiedLocale: T): T {
+  if (
+    !(proxiedLocale as unknown as { [isProxied]: true | undefined })[isProxied]
+  ) {
+    console.warn(
+      "Locale cannot be purified, because [isProxied] is not found on object.",
+    );
     return proxiedLocale;
+  }
 
-  return (proxiedLocale as { [Pure]: T })[Pure];
+  return (proxiedLocale as unknown as { [Pure]: T })[Pure];
 }
 
 export { $Proxy, $Pure, Pure, isProxied };
+
+/**
+ * Because $Proxy makes all locale properties proxied recursively,
+ * It will return object like `{ 0: 'a', 1: 'b' }` when using list in locale json.
+ * This function is same with $Pure, but it should be used for list.
+ */
+function $PureList<V>(proxiedLocale: V[]): V[] {
+  if (
+    !(proxiedLocale as unknown as { [isProxied]: true | undefined })[isProxied]
+  ) {
+    console.warn(
+      "Locale cannot be purified, because [isProxied] is not found on object.",
+    );
+    return proxiedLocale;
+  }
+
+  return Object.values<V>(
+    (proxiedLocale as unknown as { [Pure]: Record<string, V> })[Pure],
+  );
+}
