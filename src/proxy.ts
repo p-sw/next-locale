@@ -74,8 +74,6 @@ function $Pure<T extends Record<string, object>>(proxiedLocale: T): T {
   return (proxiedLocale as unknown as { [Pure]: T })[Pure];
 }
 
-export { $Proxy, $Pure, Pure, isProxied };
-
 /**
  * Because $Proxy makes all locale properties proxied recursively,
  * It will return object like `{ 0: 'a', 1: 'b' }` when using list in locale json.
@@ -95,3 +93,5 @@ function $PureList<V>(proxiedLocale: V[]): V[] {
     (proxiedLocale as unknown as { [Pure]: Record<string, V> })[Pure],
   );
 }
+
+export { $Proxy, $Pure, $PureList, Pure, isProxied };
