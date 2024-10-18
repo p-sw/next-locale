@@ -61,7 +61,7 @@ function $Proxy<T extends object | string>(
  *
  * @param proxiedLocale
  */
-function $Pure<T extends Record<string, object>>(proxiedLocale: T): T {
+function $Pure<T extends Record<string, object | string>>(proxiedLocale: T): T {
   if (
     !(proxiedLocale as unknown as { [isProxied]: true | undefined })[isProxied]
   ) {
