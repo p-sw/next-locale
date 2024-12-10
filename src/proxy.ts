@@ -1,3 +1,5 @@
+import { DeepPartial } from "./types";
+
 const isProxied = Symbol("$isProxied");
 const Pure = Symbol("$Pure");
 
@@ -25,7 +27,7 @@ function applyProxy(obj: object, prepath: string = "") {
 
       if (typeof target[p] === "undefined") {
         return undefinedChain(
-          prepath.length > 0 ? `${prepath}.${p.toString()}` : p.toString(),
+          prepath.length > 0 ? `${prepath}.${p.toString()}` : p.toString()
         );
       }
       return target[p];
@@ -34,8 +36,8 @@ function applyProxy(obj: object, prepath: string = "") {
 }
 
 function $Proxy<T extends object | string>(
-  locale: object | string,
-  prepath: string = "",
+  locale: DeepPartial<T>,
+  prepath: string = ""
 ): T {
   if (typeof locale === "string") return locale as T;
 
@@ -43,7 +45,7 @@ function $Proxy<T extends object | string>(
 
   for (const [key, value] of Object.entries(locale) as [
     string,
-    object | string,
+    object | string
   ][]) {
     if (typeof value === "object") {
       v[key] = $Proxy(value, prepath.length > 0 ? `${prepath}.${key}` : key);
@@ -61,12 +63,12 @@ function $Proxy<T extends object | string>(
  *
  * @param proxiedLocale
  */
-function $Pure<T extends Record<string, object | string>>(proxiedLocale: T): T {
+function $Pure<T extends object>(proxiedLocale: T): T {
   if (
     !(proxiedLocale as unknown as { [isProxied]: true | undefined })[isProxied]
   ) {
     console.warn(
-      "Locale cannot be purified, because [isProxied] is not found on object.",
+      "Locale cannot be purified, because [isProxied] is not found on object."
     );
     return proxiedLocale;
   }
@@ -84,13 +86,13 @@ function $PureList<V>(proxiedLocale: V[]): V[] {
     !(proxiedLocale as unknown as { [isProxied]: true | undefined })[isProxied]
   ) {
     console.warn(
-      "Locale cannot be purified, because [isProxied] is not found on object.",
+      "Locale cannot be purified, because [isProxied] is not found on object."
     );
     return proxiedLocale;
   }
 
   return Object.values<V>(
-    (proxiedLocale as unknown as { [Pure]: Record<string, V> })[Pure],
+    (proxiedLocale as unknown as { [Pure]: Record<string, V> })[Pure]
   );
 }
 
