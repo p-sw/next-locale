@@ -31,4 +31,10 @@ type DeepNestObject<A extends object, B extends object> = {
     : A[Key] & B[Key];
 };
 
-export type { MergeLocales, DeepPartial, Provider, DeepNestObject };
+type Locale = {
+  // declare module '@p-sw/next-locale' {
+  //   type Locale = {} // override
+  // }
+};
+
+export type { MergeLocales, DeepPartial, Provider, DeepNestObject, Locale };
