@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from "react";
 import { $Proxy } from "./proxy";
-import { Provider, DeepPartial, DeepNestObject } from "./types";
+import { Provider, DeepPartial, DeepNestObject, Locale } from "./types";
 
 export function deeplyNestObject<A extends object, B extends object>(
   a: A,
@@ -34,21 +34,18 @@ export function deeplyNestObject<A extends object, B extends object>(
   return newObj;
 }
 
-export function createLocaleContext<T extends object>(): [
-  () => T,
-  Provider<T>
-] {
-  const context = createContext<T>({} as T);
+export function createLocaleContext(): [() => Locale, Provider<Locale>] {
+  const context = createContext<DeepPartial<Locale>>({});
 
   function useLocale() {
-    return $Proxy<T>(useContext(context));
+    return $Proxy<Locale>(useContext(context));
   }
 
-  const Provider: Provider<T> = ({ value, children }) => {
+  const Provider: Provider<Locale> = ({ value, children }) => {
     const existingLocale = useContext(context);
 
     return (
-      <context.Provider value={{ ...existingLocale, ...value }}>
+      <context.Provider value={deeplyNestObject(existingLocale, value)}>
         {children}
       </context.Provider>
     );
