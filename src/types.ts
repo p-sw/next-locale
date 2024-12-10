@@ -17,4 +17,18 @@ type Provider<T> = (props: {
   children: ReactNode;
 }) => ReactNode;
 
-export type { MergeLocales, DeepPartial, Provider };
+type DeepNestObject<A extends object, B extends object> = {
+  [AKey in Exclude<keyof A, keyof B>]: A[AKey];
+} & {
+  [BKey in Exclude<keyof B, keyof A>]: B[BKey];
+} & {
+  [Key in keyof A & keyof B]: A[Key] extends object
+    ? B[Key] extends object
+      ? DeepNestObject<A[Key], B[Key]>
+      : never
+    : B[Key] extends object
+    ? never
+    : A[Key] & B[Key];
+};
+
+export type { MergeLocales, DeepPartial, Provider, DeepNestObject };

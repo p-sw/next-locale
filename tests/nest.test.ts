@@ -1,4 +1,5 @@
-import { type DeepNestObject, deeplyNestObject } from "../src/context";
+import { deeplyNestObject } from "../src/context";
+import { type DeepNestObject } from "../src/types";
 
 const testA = {
   a: {
