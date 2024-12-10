@@ -4,7 +4,7 @@
   "author": "Shinwoo PARK",
   "description": "Locale Helper for NextJS",
   "repository": "https://github.com/p-sw/next-locale",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "main": "src/index.js",
   "keywords": [
     "react",
